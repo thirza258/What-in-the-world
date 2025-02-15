@@ -4,6 +4,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -15,14 +17,18 @@ import com.example.restcountries.parse.Country;
 import com.squareup.picasso.Picasso;
 
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.List;
 
-public class CountryAdapter extends RecyclerView.Adapter<CountryAdapter.ViewHolder>{
+public class CountryAdapter extends RecyclerView.Adapter<CountryAdapter.ViewHolder> implements Filterable {
 
     private List<Country> data;
 
+    private List<Country> countryListFull;
+
     public CountryAdapter(List<Country> data) {
         this.data = data;
+        this.countryListFull = new ArrayList<>(data);
     }
 
     @NonNull
@@ -84,6 +90,39 @@ public class CountryAdapter extends RecyclerView.Adapter<CountryAdapter.ViewHold
     public int getItemCount() {
         return data.size();
     }
+
+    @Override
+    public Filter getFilter() {
+        return countryFilter;
+    }
+
+    private final Filter countryFilter = new Filter() {
+        @Override
+        protected FilterResults performFiltering(CharSequence constraint) {
+            List<Country> filteredList = new ArrayList<>();
+            if (constraint == null || constraint.length() == 0) {
+                filteredList.addAll(countryListFull);
+            } else {
+                String filterPattern = constraint.toString().toLowerCase().trim();
+                for (Country country : countryListFull) {
+                    if (country.getName().getOfficial().toLowerCase().contains(filterPattern)) {
+                        filteredList.add(country);
+                    }
+                }
+            }
+            FilterResults results = new FilterResults();
+            results.values = filteredList;
+            results.count = filteredList.size();
+            return results;
+        }
+
+        @Override
+        protected void publishResults(CharSequence constraint, FilterResults results) {
+            data.clear();
+            data.addAll((List) results.values);
+            notifyDataSetChanged();
+        }
+    };
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         ImageView flag;

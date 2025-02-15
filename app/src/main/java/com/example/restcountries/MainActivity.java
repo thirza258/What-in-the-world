@@ -7,6 +7,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.StrictMode;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -37,12 +39,20 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.jackson.JacksonConverterFactory;
 
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import org.json.JSONException;
+
 public class MainActivity extends AppCompatActivity {
+    private static final Logger logger = Logger.getLogger(MainActivity.class.getName());
 
     private static Retrofit retrofit;
     private EditText searchText;
     private RecyclerView recyclerView;
     private TextView noData;
+
+    private CountryAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +65,8 @@ public class MainActivity extends AppCompatActivity {
         recyclerView = findViewById(R.id.recyclerView);
         noData = findViewById(R.id.noData);
         searchText = findViewById(R.id.search_page);
+
+
 
         try {
             String fileName = "countries.json";
@@ -94,18 +106,37 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
 
-                CountryAdapter adapter = new CountryAdapter(countries);
+                adapter = new CountryAdapter(countries);
                 recyclerView.setHasFixedSize(true);
                 recyclerView.setLayoutManager(new LinearLayoutManager(this));
                 recyclerView.setAdapter(adapter);
             }
+
+            // Add search functionality
+            searchText.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+                    adapter.getFilter().filter(s); // Filter the list based on input
+                }
+
+                @Override
+                public void afterTextChanged(Editable s) {}
+            });
+
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.log(Level.SEVERE, "IO Exception occurred: " + e.getMessage(), e);
         } catch (JSONException e) {
-            e.printStackTrace();
+            logger.log(Level.SEVERE, "JSON Exception occurred: " + e.getMessage(), e);
+        } catch (Exception e) {
+            logger.log(Level.SEVERE, "Exception occurred: " + e.getMessage(), e);
         }
 
     }
+
+
 
     public static String getJSONObjectFromURL(String urlString) throws IOException, JSONException {
         HttpURLConnection urlConnection = null;
