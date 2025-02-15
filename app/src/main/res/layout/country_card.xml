@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_margin="20dp"
+    android:id="@+id/card_country"
+    app:cardBackgroundColor="?attr/cardBackgroundColor"
+    app:cardCornerRadius="15dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_gravity="center_horizontal"
+            android:gravity="center_horizontal"
+            android:paddingBottom="20dp">
+
+            <ImageView
+                android:id="@+id/flag"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:src="@drawable/ic_launcher_background"
+                android:scaleType="centerCrop"
+                />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/name"
+                android:text="Name"
+                android:layout_gravity="center_horizontal"
+                android:gravity="center"
+                android:textSize="30sp"
+                />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/population"
+                android:text="Capital"
+                android:textSize="20sp"
+                android:layout_marginLeft="20sp"
+                android:layout_marginTop="20dp"
+                />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/region"
+                android:text="Capital"
+                android:textSize="20sp"
+                android:layout_marginLeft="20sp"
+                android:layout_marginTop="20dp"
+                />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/capital"
+                android:text="Capital"
+                android:textSize="20sp"
+                android:layout_marginLeft="20sp"
+                android:layout_marginTop="20dp"
+                />
+
+
+
+        </LinearLayout>
+
+
+
+</androidx.cardview.widget.CardView>
